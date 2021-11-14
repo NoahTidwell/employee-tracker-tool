@@ -29,7 +29,7 @@ function beginPrompt() {
             choices: [
                 'View All Employees',
                 'View All Departments',
-                'View All Employees + Roles',
+                'View All Roles',
                 'Add Employee',
                 'Add Department',
                 'Add Role',
@@ -47,7 +47,7 @@ function beginPrompt() {
                 viewAllDepartment();
                 break;
 
-            case 'View All Employees + Roles':
+            case 'View All Roles':
                 viewAllRole();
                 break;
 
@@ -93,7 +93,7 @@ function viewAllDepartment() {
 
 // View All Employees + Roles Function
 function viewAllRole() {
-    db.query(`SELECT employee.id, employee.first_name, employee.last_name, roles.role_title AS role_title FROM employee JOIN roles ON employee.roles_id = roles.id;`, (err, res) => {
+    db.query(`SELECT roles.role_title AS Role_Title FROM roles;`, (err, res) => {
 
         if (err) throw err
         console.table(res)
@@ -163,7 +163,7 @@ function addDepartment() {
         {
             department_name: data.department_name
         })
-        beginPrompt();
+        beginPrompt()
     })
     .catch(err => {
      if (err) {
@@ -176,8 +176,52 @@ function addDepartment() {
 
 // Add a Role Function
 function addRole() {
-    console.log('test')
-    beginPrompt();
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role_title',
+            message: 'Name of Role.'
+        },
+        {
+            type: 'input',
+            name: 'role_salary',
+            message: 'Salary of Role (Format without $ or ,  e.g. 25000)'
+        },
+        {
+            type: 'list',
+            name: 'department_id',
+            message: "Which department does this role belong to?",
+            choices: displayDepartmentQuery()
+        }
+    ]).then(data => {
+        var departmentId = displayDepartmentQuery().indexOf(data.department_id) + 1
+        db.query(`INSERT INTO roles SET ?`,
+        {
+            role_title: data.role_title,
+            role_salary: data.role_salary,
+            department_id: departmentId
+        })
+        beginPrompt()
+    })
+    .catch(err => {
+     if (err) {
+         console.log(err)
+         console.table(data)
+     }
+ 
+    });
+}
+
+// Function to display department choices in Add Employee
+var departmentArr = [];
+function displayDepartmentQuery() {
+    db.query(`SELECT * FROM department`, (err, res) => {
+        if (err) throw err
+        for (var i = 0; i < res.length; i++) {
+            departmentArr.push(res[i].department_name);
+        }
+    })
+    return departmentArr;
 }
 
 // Update an Employee's Role
