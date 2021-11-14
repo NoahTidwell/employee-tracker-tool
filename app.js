@@ -28,8 +28,8 @@ function beginPrompt() {
             name: 'initChoice',
             choices: [
                 'View All Employees',
-                'View All Employees by Department',
-                'View All Employees by Role',
+                'View All Departments',
+                'View All Employees + Roles',
                 'Add Employee',
                 'Remove Employee',
                 'Update Employee Role',
@@ -43,12 +43,12 @@ function beginPrompt() {
                 viewAllEmployees();
                 break;
             
-            case 'View All Employees by Department':
-                viewByDepartment();
+            case 'View All Departments':
+                viewAllDepartment();
                 break;
 
-            case 'View All Employees by Role':
-                viewByRole();
+            case 'View All Employees + Roles':
+                viewAllRole();
                 break;
 
             case 'Add Employee':
@@ -75,23 +75,33 @@ function beginPrompt() {
 
 // View All Employees Function
 function viewAllEmployees() {
-    console.log('test');
+    db.query(`SELECT employee.first_name, employee.last_name FROM employee;`, 
+    function (err, res) {
+        if (err) throw err
+        console.table(res)
+        beginPrompt();
+    })
 }
 
-// View All Employees by Department Function
-function viewByDepartment() {
-    console.log('test');
-}
-
-// View All Employees by Role Function
-function viewByRole() {
-    db.query(`SELECT employee.first_name, employee.last_name, roles.role_title AS Title FROM employee JOIN roles ON employee.role_id`, 
-    function (err) {
+// View All Departments Function
+function viewAllDepartment() {
+    db.query(`SELECT department.department_name AS Department FROM department;`,
+    function (err, res) {
         if (err) throw err
         console.table(res)
         beginPrompt()
-    });
-};
+    })
+}
+
+// View All Employees + Roles Function
+function viewAllRole() {
+    db.query(`SELECT employee.first_name, employee.last_name, roles.role_title AS role_title FROM employee JOIN roles ON employee.roles_id = roles.id;`, 
+    function (err, res) {
+        if (err) throw err
+        console.table(res)
+        beginPrompt()
+    })
+}
 
 // Add an Employee Function
 function addEmployee() {
