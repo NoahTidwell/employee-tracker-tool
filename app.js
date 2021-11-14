@@ -68,15 +68,13 @@ function beginPrompt() {
                 break;
         }
     })
-    .catch(err => {
-        console.log(err);
-    });
+
 }
 
 // View All Employees Function
 function viewAllEmployees() {
-    db.query(`SELECT employee.first_name, employee.last_name FROM employee;`, 
-    function (err, res) {
+    db.query(`SELECT employee.first_name, employee.last_name FROM employee;`, (err, res) => {
+
         if (err) throw err
         console.table(res)
         beginPrompt();
@@ -85,8 +83,8 @@ function viewAllEmployees() {
 
 // View All Departments Function
 function viewAllDepartment() {
-    db.query(`SELECT department.department_name AS Department FROM department;`,
-    function (err, res) {
+    db.query(`SELECT department.department_name AS Department FROM department;`,(err, res) => {
+
         if (err) throw err
         console.table(res)
         beginPrompt()
@@ -95,8 +93,8 @@ function viewAllDepartment() {
 
 // View All Employees + Roles Function
 function viewAllRole() {
-    db.query(`SELECT employee.first_name, employee.last_name, roles.role_title AS role_title FROM employee JOIN roles ON employee.roles_id = roles.id;`, 
-    function (err, res) {
+    db.query(`SELECT employee.first_name, employee.last_name, roles.role_title AS role_title FROM employee JOIN roles ON employee.roles_id = roles.id;`, (err, res) => {
+
         if (err) throw err
         console.table(res)
         beginPrompt()
@@ -120,19 +118,38 @@ function addEmployee() {
            type: 'list',
            name: 'role',
            message: "What is this employee's new role?",
-           choices: ['Backend Engineer', 'Frontend Engineer', 'Lead Engineer', 'Sales Associate', 'Head of Sales', 'Attorny', 'President']
+           choices: displayRolesQuery()
        }
-   ]).then(function(data) {
+   ]).then(data => {
+       var roleId = displayRolesQuery().indexOf(data.role) + 1
        db.query(`INSERT INTO employee SET ?`,
        {
            first_name: data.first_name,
            last_name: data.last_name,
-           role: data.role
-       }
+           roles_id: roleId
+       })
+       beginPrompt();
+   })
+   .catch(err => {
+    if (err) {
+        console.log(err)
+        console.table(data)
+    }
 
-       )}
-   )};
+   });
+}
 
+// Function to display roles choices in Add Employee
+var roleArr = [];
+function displayRolesQuery() {
+    db.query(`SELECT * FROM roles`, (err, res) => {
+        if (err) throw err
+        for (var i = 0; i < res.length; i++) {
+            roleArr.push(res[i].role_title);
+        }
+    })
+    return roleArr;
+}
 // Remove an Employee Function
 function removeEmployee() {
     console.log('test');
