@@ -93,7 +93,7 @@ function viewAllDepartment() {
 
 // View All Employees + Roles Function
 function viewAllRole() {
-    db.query(`SELECT employee.first_name, employee.last_name, roles.role_title AS role_title FROM employee JOIN roles ON employee.roles_id = roles.id;`, (err, res) => {
+    db.query(`SELECT employee.id, employee.first_name, employee.last_name, roles.role_title AS role_title FROM employee JOIN roles ON employee.roles_id = roles.id;`, (err, res) => {
 
         if (err) throw err
         console.table(res)
@@ -152,15 +152,18 @@ function displayRolesQuery() {
 }
 // Remove an Employee Function
 function removeEmployee() {
-    console.log('test');
+    console.log('test')
+    beginPrompt();
 }
 
 // Update an Employee's Manager
 function updateManager() {
-    console.log('test');
+    console.log('test')
+    beginPrompt();
 }
 
 // Update an Employee's Role
 function updateRole() {
-    console.log('test');
+    console.log('test')
+    beginPrompt();
 }
