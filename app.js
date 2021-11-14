@@ -31,9 +31,9 @@ function beginPrompt() {
                 'View All Departments',
                 'View All Employees + Roles',
                 'Add Employee',
-                'Remove Employee',
-                'Update Employee Role',
-                'Update Employee Manager'
+                'Add Department',
+                'Add Role',
+                'Update Employee Role'
 
             ]
         }
@@ -55,16 +55,16 @@ function beginPrompt() {
                 addEmployee();
                 break;
 
-            case 'Remove Employee':
-                removeEmployee();
+            case 'Add Department':
+                addDepartment();
+                break;
+
+            case 'Add Role':
+                addRole();
                 break;
 
             case 'Update Employee Role':
                 updateRole();
-                break;
-
-            case 'Update Employee Manager':
-                updateManager();
                 break;
         }
     })
@@ -83,7 +83,7 @@ function viewAllEmployees() {
 
 // View All Departments Function
 function viewAllDepartment() {
-    db.query(`SELECT department.department_name AS Departments FROM department;`,(err, res) => {
+    db.query(`SELECT department.id, department.department_name AS Departments FROM department;`,(err, res) => {
 
         if (err) throw err
         console.table(res)
@@ -150,14 +150,32 @@ function displayRolesQuery() {
     })
     return roleArr;
 }
-// Remove an Employee Function
-function removeEmployee() {
-    console.log('test')
-    beginPrompt();
+// Add a Department Function
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'department_name',
+            message: 'Name of department.'
+        }
+    ]).then(data => {
+        db.query(`INSERT INTO department SET ?`,
+        {
+            department_name: data.department_name
+        })
+        beginPrompt();
+    })
+    .catch(err => {
+     if (err) {
+         console.log(err)
+         console.table(data)
+     }
+ 
+    });
 }
 
-// Update an Employee's Manager
-function updateManager() {
+// Add a Role Function
+function addRole() {
     console.log('test')
     beginPrompt();
 }
