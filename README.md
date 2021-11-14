@@ -22,9 +22,6 @@ run npm install to download neccessary dependencies. To initiate the application
 ## Usage:
 To initiate the application run node app.js then navigate the menu using the arrows. Choose your entry by hitting the enter key. Follow the prompt for additional details.
 
-## License:
-
-
 ## Contribution:
 Pull Request, Submit Issue, or contact me.
 
