@@ -73,7 +73,7 @@ function beginPrompt() {
 
 // View All Employees Function
 function viewAllEmployees() {
-    db.query(`SELECT employee.first_name, employee.last_name FROM employee;`, (err, res) => {
+    db.query(`SELECT employee.id, employee.first_name, employee.last_name, roles.role_title AS role_title, roles.role_salary AS Salary, department.department_name AS Department FROM employee JOIN roles ON employee.roles_id = roles.id JOIN department ON roles.department_id = department.id;`, (err, res) => {
 
         if (err) throw err
         console.table(res)
@@ -83,7 +83,7 @@ function viewAllEmployees() {
 
 // View All Departments Function
 function viewAllDepartment() {
-    db.query(`SELECT department.department_name AS Department FROM department;`,(err, res) => {
+    db.query(`SELECT department.department_name AS Departments FROM department;`,(err, res) => {
 
         if (err) throw err
         console.table(res)
