@@ -33,7 +33,7 @@ function beginPrompt() {
                 'Add Employee',
                 'Add Department',
                 'Add Role',
-                'Update Employee Role'
+                //'Update Employee Role'
 
             ]
         }
@@ -63,9 +63,9 @@ function beginPrompt() {
                 addRole();
                 break;
 
-            case 'Update Employee Role':
-                updateRole();
-                break;
+            //case 'Update Employee Role':
+               // updateRole();
+             //   break;
         }
     })
 
@@ -93,7 +93,7 @@ function viewAllDepartment() {
 
 // View All Employees + Roles Function
 function viewAllRole() {
-    db.query(`SELECT roles.role_title AS Role_Title FROM roles;`, (err, res) => {
+    db.query(`SELECT roles.id, roles.role_title AS Role_Title FROM roles;`, (err, res) => {
 
         if (err) throw err
         console.table(res)
@@ -225,7 +225,7 @@ function displayDepartmentQuery() {
 }
 
 // Update an Employee's Role
-function updateRole() {
-    console.log('test')
-    beginPrompt();
-}
+// function updateRole() {
+    // console.log('test')
+   // beginPrompt();
+// }
