@@ -93,7 +93,7 @@ function viewAllDepartment() {
 
 // View All Employees + Roles Function
 function viewAllRole() {
-    db.query(`SELECT roles.role_title AS Role_Title FROM roles;`, (err, res) => {
+    db.query(`SELECT roles.id, roles.role_title AS Role_Title FROM roles;`, (err, res) => {
 
         if (err) throw err
         console.table(res)
